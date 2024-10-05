@@ -1,9 +1,8 @@
 public class Node {
-	int data;  
+    String data;  
     Node next;  
-
     // Constructor
-    Node(int data) {
+    Node(String data) {
         this.data = data;
         this.next = null;
     }

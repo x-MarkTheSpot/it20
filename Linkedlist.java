@@ -1,7 +1,8 @@
 public class LinkedList {
-    private Node head;
+	private Node head; 
+
     // Method to add a new node at the end of the list
-    public void add(String data) {
+    public void add(int data) {
         Node newNode = new Node(data);
         if (head == null) {
             head = newNode;
@@ -13,6 +14,7 @@ public class LinkedList {
         }
         current.next = newNode;
     }
+    
     // Method to print the linked list
     public void printList() {
         Node current = head;
@@ -22,72 +24,70 @@ public class LinkedList {
         }
         System.out.println("null");
     }
+    
     // Method to delete a node by value
-    public void deleteByValue(String value) {
+    public void deleteByValue(int value) {
         if (head == null) return;
+
         // If the head needs to be removed
-        if (head.data.equals(value)) {
+        if (head.data == value) {
             head = head.next;
             return;
         }
+
         Node current = head;
         while (current.next != null) {
-            if (current.next.data.equals(value)) {
-                current.next = current.next.next;
+            if (current.next.data == value) {
+                current.next = current.next.next; 
                 return;
             }
             current = current.next;
         }
     }
-    // Method to move a node to a new position / swap nodes
-    public void moveNodePointer(String value1, String value2) {
-        if (head == null || value1.equals(value2)) return;
-        Node prev1 = null, node1 = null, current = head;
-        Node prev2 = null, node2 = null;
-        // Find the first node (node1) with value1
-        while (current != null && node1 == null) {
-            if (current.data.equals(value1)) {
-                node1 = current;
-            } else {
-                prev1 = current;
-            }
+    
+    // Method to move a node to a new position /swap nodes
+    public void moveNodePointer(int currentIndex, int newIndex) {
+        if (head == null || currentIndex == newIndex) return;
+        
+        Node current = head;
+        Node prev = null;
+        Node movingNode = null;
+        Node movingPrev = null;
+
+        // Find the node to move
+        for (int i = 0; current != null && i < currentIndex; i++) {
+            movingPrev = prev;
+            prev = current;
             current = current.next;
         }
-        // Find the second node (node2) with value2
+        movingNode = current;
+
+        // If the node to move was not found
+        if (movingNode == null) return;
+
+        // Remove the node from its current position
+        if (movingPrev != null) {
+            movingPrev.next = movingNode.next;
+        } else {
+        	// Moving the head
+            head = movingNode.next; 
+        }
+
+        // Insert the node at the new position
         current = head;
-        while (current != null && node2 == null) {
-            if (current.data.equals(value2)) {
-                node2 = current;
-            } else {
-                prev2 = current;
-            }
+        prev = null;
+        for (int i = 0; current != null && i < newIndex; i++) {
+            prev = current;
             current = current.next;
         }
-        // If both nodes are found, swap them
-        if (node1 != null && node2 != null) {
-            if (prev1 != null) {
-                prev1.next = node2;
-            } else {
-                head = node2; // If node1 is the head
-            }
-            if (prev2 != null) {
-                prev2.next = node1;
-            } else {
-                head = node1; // If node2 is the head
-            }
-            // Swap next pointers
-            Node temp = node1.next;
-            node1.next = node2.next;
-            node2.next = temp;
+
+        if (prev != null) {
+            movingNode.next = current;
+            prev.next = movingNode;
+        } else {
+            movingNode.next = head;
+            head = movingNode;
         }
     }
-    // Node class
-    private static class Node {
-        String data;
-        Node next;
-        Node(String data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
+
 }
